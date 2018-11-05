@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :items
   has_many :user_addresses
 
-  validates_presence_of :name, :address, :city, :state, :zip
+  validates_presence_of :name
   validates :email, presence: true, uniqueness: true
 
   enum role: %w(user merchant admin)
