@@ -3,32 +3,33 @@ require 'rails_helper'
 RSpec.describe 'User Order pages' do
   before(:each) do
     @user = create(:user)
+    @address = create(:user_address, default: true, user: @user)
     @admin = create(:admin)
     @msg_no_orders_yet = 'Sorry there are no orders yet.'
   end
 
-  context 'admin user' do 
+  context 'admin user' do
     context 'having order data' do
       before(:each) do
         @merchant = create(:merchant)
         @item_1, @item_2, @item_3, @item_4, @item_5 = create_list(:item, 5, user: @merchant)
-        
-        @order_1 = create(:order, user: @user)
+
+        @order_1 = create(:order, user: @user, user_address: @address)
         create(:order_item, order: @order_1, item: @item_1)
         create(:order_item, order: @order_1, item: @item_2)
-    
-        @order_2 = create(:completed_order, user: @user)
+
+        @order_2 = create(:completed_order, user: @user, user_address: @address)
         create(:fulfilled_order_item, order: @order_2, item: @item_2)
         create(:fulfilled_order_item, order: @order_2, item: @item_3)
-    
-        @order_3 = create(:cancelled_order, user: @user)
+
+        @order_3 = create(:cancelled_order, user: @user, user_address: @address)
         create(:order_item, order: @order_3, item: @item_3)
         create(:order_item, order: @order_3, item: @item_4)
-    
-        @order_4 = create(:disabled_order, user: @user)
+
+        @order_4 = create(:disabled_order, user: @user, user_address: @address)
         create(:order_item, order: @order_4, item: @item_1)
         create(:order_item, order: @order_4, item: @item_3)
-    
+
       end
       scenario 'allows admin user to see all personal orders for a user' do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin)
@@ -50,7 +51,7 @@ RSpec.describe 'User Order pages' do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin)
         merchant = create(:merchant)
         @item_1, @item_2, @item_3, @item_4, @item_5 = create_list(:item, 5, user: merchant)
-    
+
         visit orders_path
 
         expect(page).to_not have_content(@msg_no_orders_yet)
@@ -71,13 +72,13 @@ RSpec.describe 'User Order pages' do
       merchant = create(:merchant)
       @item_1, @item_2, @item_3, @item_4, @item_5 = create_list(:item, 5, user: merchant)
 
-      @order_1 = create(:order, user: @user)
+      @order_1 = create(:order, user: @user, user_address: @address)
       create(:order_item, order: @order_1, item: @item_1)
       create(:order_item, order: @order_1, item: @item_2)
-  
-      @order_2 = create(:disabled_order, user: @user)
+
+      @order_2 = create(:disabled_order, user: @user, user_address: @address)
       create(:order_item, order: @order_2, item: @item_3)
-  
+
       visit orders_path
 
       expect(page).to_not have_content(@msg_no_orders_yet)
