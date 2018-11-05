@@ -1,11 +1,16 @@
 FactoryBot.define do
   factory :user_address do
-    address { "MyString" }
-    city { "MyString" }
-    state { "MyString" }
-    zip { 1 }
-    nickname { "MyString" }
+
+    sequence(:nickname) { |n| "Nickname #{n}" }
+
+    sequence(:address)  { |n| "Address #{n}" }
+    sequence(:city)     { |n| "City #{n}" }
+    sequence(:state)    { |n| "State #{n}" }
+    sequence(:zip)      { |n| "Zip #{n}" }
+
     default { false }
-    active { false }
+    active  { true }
+
+    user { nil }
   end
 end
