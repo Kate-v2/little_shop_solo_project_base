@@ -15,36 +15,44 @@ RSpec.describe Order, type: :model do
   describe 'Class Methods' do
     before(:each) do
       @user_1 = create(:user, state: 'CO')
+      @user_1_address = create(:user_address, user: @user_1, default: true, state: "CO" )
+
       @user_2 = create(:user, state: 'CA')
+      @user_2_address = create(:user_address, user: @user_2, default: true, state: "CA" )
+
       @user_3 = create(:user, state: 'FL')
+      @user_3_address = create(:user_address, user: @user_3, default: true, state: "FL" )
+
       @user_4 = create(:user, state: 'NY')
+      @user_4_address = create(:user_address, user: @user_4, default: true, state: "NY" )
+
 
       @merchant = create(:merchant)
       item_1 = create(:item, user: @merchant)
 
       # Colorado is 1st place
-      order = create(:completed_order, user: @user_1)
+      order = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_1)
+      order = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_1)
+      order = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_1)
+      order = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, order: order, item: item_1)
       # California is 2nd place
-      order = create(:completed_order, user: @user_2)
+      order = create(:completed_order, user: @user_2, user_address: @user_2_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_2)
+      order = create(:completed_order, user: @user_2, user_address: @user_2_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_2)
+      order = create(:completed_order, user: @user_2, user_address: @user_2_address)
       create(:fulfilled_order_item, order: order, item: item_1)
       # Sorry Florida
-      order = create(:completed_order, user: @user_3)
+      order = create(:completed_order, user: @user_3, user_address: @user_3_address)
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_4)
+      order = create(:completed_order, user: @user_4, user_address: @user_4_address)
       # NY is 3rd place
       create(:fulfilled_order_item, order: order, item: item_1)
-      order = create(:completed_order, user: @user_4)
+      order = create(:completed_order, user: @user_4, user_address: @user_4_address)
       create(:fulfilled_order_item, order: order, item: item_1)    end
     it '.top_shipping(:state, 3)' do
       expect(Order.top_shipping(:state, 3)).to eq(['CO', 'CA', 'NY'])
@@ -55,13 +63,13 @@ RSpec.describe Order, type: :model do
     it '.biggest_orders(3)' do
       item_1 = create(:item, user: @merchant)
 
-      order_1 = create(:completed_order, user: @user_1)
+      order_1 = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, quantity: 100, order: order_1, item: item_1)
 
-      order_2 = create(:completed_order, user: @user_1)
+      order_2 = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, quantity: 10000, order: order_2, item: item_1)
 
-      order_3 = create(:completed_order, user: @user_1)
+      order_3 = create(:completed_order, user: @user_1, user_address: @user_1_address)
       create(:fulfilled_order_item, quantity: 1000, order: order_3, item: item_1)
 
       expect(Order.biggest_orders(3)).to eq([order_2, order_3, order_1])
@@ -71,10 +79,11 @@ RSpec.describe Order, type: :model do
   describe 'Instance Methods' do
     it '.total' do
       @user = create(:user)
+      @user_address = create(:user_address, user: @user, default: true )
       @merchant = create(:merchant)
       @item_1, @item_2, @item_3 = create_list(:item, 3, user: @merchant)
 
-      @order_1 = create(:order, user: @user)
+      @order_1 = create(:order, user: @user, user_address: @user_address)
       oi_1 = create(:order_item, order: @order_1, item: @item_1)
       oi_2 = create(:order_item, order: @order_1, item: @item_2)
       oi_3 = create(:order_item, order: @order_1, item: @item_3)
