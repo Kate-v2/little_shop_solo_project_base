@@ -1,0 +1,23 @@
+
+
+<div class='addresses'>
+  <% if @user.user_addresses %>
+    <% @user.user_addresses.each do |address| %>
+      <span class='address'>
+        <h3><%= address.nickname %><h3>
+        <h4><%= "Default" if address.default == true %><h4>
+        <p><%=  address.address  %></p>
+        <p><%=  address.city     %></p>
+        <p><%=  address.state    %></p>
+        <p><%=  address.zip      %></p>
+      </span>
+    <% end %>
+
+  <% else %>
+    <h3>"No current addresses."
+    <% title = "Create an address" %>
+    <!-- < %= (link_to title,  ) %> -->
+    <!-- < %= (link_to title,  ) %> -->
+    <h3>
+  <% end %>
+</div>

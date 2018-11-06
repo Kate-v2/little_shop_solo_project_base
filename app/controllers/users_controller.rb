@@ -1,8 +1,11 @@
 class UsersController < ApplicationController
+
+
   def index
     render file: 'errors/not_found', status: 404 unless current_admin?
     @users = User.all
   end
+
 
   def show
     if request.fullpath == '/profile'
@@ -20,9 +23,11 @@ class UsersController < ApplicationController
     end
   end
 
+
   def new
     @user = User.new
   end
+
 
   def edit
     render file: 'errors/not_found', status: 404 if current_user.nil?
@@ -35,6 +40,18 @@ class UsersController < ApplicationController
       end
     end
   end
+
+
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      session[:user_id] = @user.id
+      redirect_to profile_path, notice: 'Welcome to the site!'
+    else
+      render :new
+    end
+  end
+
 
   def update
     render file: 'errors/not_found', status: 404 if current_user.nil?
@@ -81,20 +98,10 @@ class UsersController < ApplicationController
     end
   end
 
-  def create
-    @user = User.new(user_params)
-    if @user.save
-      session[:user_id] = @user.id
-      redirect_to profile_path, notice: 'Welcome to the site!'
-    else
-      render :new
-    end
-  end
-
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :name, :address, :city, :state, :zip)
+      params.require(:user).permit(:email, :password, :password_confirmation, :name)
     end
 end

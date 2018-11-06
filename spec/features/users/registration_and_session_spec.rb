@@ -23,7 +23,7 @@ RSpec.describe 'Registration and Session Management' do
         click_button 'Create User'
 
         expect(current_path).to eq(users_path)
-        expect(page).to have_content('7 errors prohibited this user from being saved')
+        expect(page).to have_content('3 errors prohibited this user from being saved')
       end
 
       it 'because password confirmation was wrong' do

@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+
   def index
     if request.fullpath == '/orders'
       if current_admin?
@@ -22,14 +23,23 @@ class OrdersController < ApplicationController
     end
   end
 
+
+  def show
+    @order = Order.find(params[:id])
+    @address = @order.user_address
+    render file: 'errors/not_found', status: 404 unless current_user || current_user.user? && current_user == @order.user || current_user.merchant? && current_user.merchant_for_order(@order) || current_admin?
+    @user = @order.user
+  end
+
+
   def create
     items = Item.where(id: @cart.contents.keys)
     order = Order.create!(user: current_user, status: :pending)
     items.each do |item|
       order.order_items.create!(
-        item: item, 
-        price: item.price, 
-        quantity: @cart.count_of(item.id), 
+        item: item,
+        price: item.price,
+        quantity: @cart.count_of(item.id),
         fulfilled: false)
     end
     session[:cart] = nil
@@ -37,12 +47,13 @@ class OrdersController < ApplicationController
     redirect_to profile_orders_path
   end
 
+
   def update
     user = User.find(params[:user_id])
     render file: 'errors/not_found', status: 404 unless current_admin? || current_user == user
     order = Order.find(params[:id])
     render file: 'errors/not_found', status: 404 unless order
-    
+
     if params[:status]
       if params[:status] == 'cancel'
         order.order_items.each do |oi|
@@ -59,9 +70,4 @@ class OrdersController < ApplicationController
     redirect_to current_admin? ? user_orders_path(user) : profile_orders_path
   end
 
-  def show
-    @order = Order.find(params[:id])
-    render file: 'errors/not_found', status: 404 unless current_user || current_user.user? && current_user == @order.user || current_user.merchant? && current_user.merchant_for_order(@order) || current_admin?
-    @user = @order.user
-  end
 end
