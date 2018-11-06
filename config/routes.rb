@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create] do
     patch ':order_item_id/fulfill', to: 'order_items#update', as: 'item_fulfill'
   end
+
+  get '/checkout_address', to: 'user_addresses#index', as: 'select_address'
+
   resources :order_items, only: [:update]
 
   resources :items, only: [:index, :show]

@@ -2,36 +2,79 @@
 class UserAddressesController < ApplicationController
 
   def index
-    id = params[:user_id].to_i
-    if current_user && current_user.id == id
-      @user = User.find(id) # if current_user.id == id
+
+    
+
+    # regular index
+    # checkout with index
+    if permissions
+      @user = User.find(@id) # if current_user.id == id
       addresses  = @user.user_addresses
       @default   = addresses.where(default: true).first    if addresses
       @addresses = addresses.where('id != ?', @default.id) if addresses
     else
-      render file: 'errors/not_found', status: 404
+      not_found
     end
   end
 
   def new
+    if permissions
+      @user = current_user
+      @address = UserAddress.new
+      @form_url = profile_user_addresses_path
+      @method = :post
+    else
+      not_found
+    end
   end
 
   def create
     # if none or disabled, then make default
     # if save, success
     # else failure
+    if permissions
+      @user = current_user
+      @address = UserAddress.new(address_params)
+      default = UserAddress.where(user_id: @user.id, default: true )
+      @address.default = false if default.count > 0
+      @address.default = true  if default.count == 0
+
+      saved = can_save(@address, :success, :failure)
+      redirect_to profile_user_addresses_path if saved
+      render :new if !saved
+    else
+      not_found
+    end
   end
 
   def edit
+    if permissions
+      @user = current_user
+      id = params[:id].to_i
+      @address = UserAddress.find(id)
+      @form_url = profile_user_address_path(address)
+      @method = :put
+    else
+      not_found
+    end
   end
 
   def update
-    if current_user
+    if permissions
       id = params[:id].to_i
       @address = UserAddress.find(id)
       if !params[:active].nil?
         @address.active = true  if params[:active] == "true"
-        @address.active = false if params[:active] == "false"
+
+        if params[:active] == "false"
+          @address.active = false
+          # if @address.default == true
+          #   new_default = UserAddress.where(user_id: current_user.id, active: true).first
+          #   new_default.default = true
+          #   new_default.save
+          # end
+        end
+
         can_save(@address, :enabled, :disabled)
       end
       if params[:default] == "true"
@@ -44,7 +87,7 @@ class UserAddressesController < ApplicationController
 
       redirect_to profile_user_addresses_path(user_id: current_user)
     else
-      render file: 'errors/not_found', status: 404
+      not_found
     end
   end
 
@@ -55,6 +98,16 @@ class UserAddressesController < ApplicationController
     params.require(:address).permit(:nickname, :address, :city, :state, :zip)
   end
 
+  def format_user_id
+    @id = params[:user_id].to_i
+  end
+
+  def permissions
+    # @id = params[:user_id].to_i
+    format_user_id
+    current_user && current_user.id == @id
+  end
+
   def can_save(address, success, fail)
     if address.save
       flash[:notice] = "#{address.address.titleize}" + flashes[success]
@@ -63,6 +116,10 @@ class UserAddressesController < ApplicationController
       flash[:notice] = "#{address.address.titleize}" + flashes[fail]
       false
     end
+  end
+
+  def not_found
+    render file: 'errors/not_found', status: 404
   end
 
   def flashes

@@ -146,6 +146,13 @@ describe 'user sees all addresses' do
         expect(previous).to have_button("Make Default")
       end
 
+      it 'can edit' do
+        @card.click_button("Edit")
+        url = edit_profile_user_address_path(@address1)
+        expect(page).to have_current_path(url)
+
+
+      end
 
 
 
