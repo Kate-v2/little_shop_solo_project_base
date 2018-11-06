@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :items
   has_many :user_addresses
 
-  validates_presence_of :name, :address, :city, :state, :zip
+  validates_presence_of :name
   validates :email, presence: true, uniqueness: true
 
   enum role: %w(user merchant admin)
@@ -34,6 +34,10 @@ class User < ApplicationRecord
     items.sum(:inventory)
   end
 
+
+  # ----- FIX THESE ---------
+  # orders needs to join with user_address
+
   def top_shipping(metric, quantity)
     items
       .joins(:orders)
@@ -53,6 +57,10 @@ class User < ApplicationRecord
   def top_3_shipping_cities
     top_shipping(:city, 3)
   end
+
+  # ---------------------------
+
+
 
   def top_active_user
     User

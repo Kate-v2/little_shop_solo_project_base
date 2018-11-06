@@ -1,5 +1,5 @@
 <h1>
-  Welcome, 
+  Welcome,
     <%= @user.name if current_user == @user %>
     <%= @user.name if current_admin? %>
 </h1>
@@ -27,5 +27,5 @@
   <% else %>
   <%= button_to "Enable", user_path(@user), method: :patch, params: { toggle: :enable } %>
   <% end %>
-  <%= button_to "Upgrade to Merchant", user_path(@user), method: :patch, params: { toggle: :role } %> 
+  <%= button_to "Upgrade to Merchant", user_path(@user), method: :patch, params: { toggle: :role } %>
 <% end %>
