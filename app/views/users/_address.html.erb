@@ -1,0 +1,10 @@
+
+<span class='address' id="address-<%=address.id%>">
+  <% if @user == current_user %>
+    <%= render partial: 'users/user_address', locals: { address: address } %>
+  <% end %>
+  <p><%=  address.address  %></p>
+  <p><%=  address.city     %></p>
+  <p><%=  address.state    %></p>
+  <p><%=  address.zip      %></p>
+</span>

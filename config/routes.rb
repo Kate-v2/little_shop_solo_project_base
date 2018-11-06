@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   namespace :profile do
     get 'edit'
     get 'orders'
+  end
+  namespace :profile, module: false do
     resources :user_addresses, only: [:index, :new, :create, :edit, :update]
   end
 

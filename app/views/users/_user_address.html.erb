@@ -1,0 +1,12 @@
+
+<h3><%= address.nickname %><h3>
+
+<h4><%= "Default" if address.default == true %></h4>
+<h5><%= address.active ? "Active" : "Inactive" %></h5>
+<!-- enable / disable button here -->
+<!-- make default -->
+
+<%= (button_to "Enable",  profile_user_address_path(address, active: true))  if address.active == false %>
+<%= (button_to "Disable", profile_user_address_path(address, active: false)) if address.active == true  %>
+
+<%= (button_to "Make Default", profile_user_address_path(address, default: true)) if address.default == false %>
