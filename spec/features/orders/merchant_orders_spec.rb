@@ -20,6 +20,10 @@ RSpec.describe 'Merchant Orders' do
 
   context 'merchant user' do
     it 'sees a link to view dashboard orders if there are any orders' do
+
+      skip("Join Table in User model")
+
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit dashboard_path
 
@@ -28,6 +32,10 @@ RSpec.describe 'Merchant Orders' do
       expect(current_path).to eq(dashboard_orders_path)
     end
     it 'does not see a link to view dashboard orders if there are no orders' do
+
+      skip("Join Table in User model")
+
+
       merchant_2 = create(:merchant)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant_2)
 
