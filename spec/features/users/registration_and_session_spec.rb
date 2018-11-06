@@ -1,21 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe 'Registration and Session Management' do 
+RSpec.describe 'Registration and Session Management' do
   describe 'Registration' do
     it 'anonymous visitor registers properly' do
       email = 'fred@gmail.com'
       password = 'test1234'
       visit register_path
-  
+
       expect(current_path).to eq(register_path)
       fill_in :user_email, with: email
       fill_in :user_password, with: password
       fill_in :user_password_confirmation, with: password
       fill_in :user_name, with: 'Name'
-      fill_in :user_address, with: 'Address'
-      fill_in :user_city, with: 'City'
-      fill_in :user_state, with: 'State'
-      fill_in :user_zip, with: 'Zip'
       click_button 'Create User'
 
       expect(current_path).to eq(profile_path)
@@ -34,16 +30,12 @@ RSpec.describe 'Registration and Session Management' do
         email = 'fred@gmail.com'
         password = 'test1234'
         visit register_path
-    
+
         expect(current_path).to eq(register_path)
         fill_in :user_email, with: email
         fill_in :user_password, with: password
         fill_in :user_password_confirmation, with: 'something else'
         fill_in :user_name, with: 'Name'
-        fill_in :user_address, with: 'Address'
-        fill_in :user_city, with: 'City'
-        fill_in :user_state, with: 'State'
-        fill_in :user_zip, with: 'Zip'
         click_button 'Create User'
 
         expect(current_path).to eq(users_path)
@@ -59,10 +51,6 @@ RSpec.describe 'Registration and Session Management' do
         fill_in :user_password, with: password
         fill_in :user_password_confirmation, with: password
         fill_in :user_name, with: 'Name'
-        fill_in :user_address, with: 'Address'
-        fill_in :user_city, with: 'City'
-        fill_in :user_state, with: 'State'
-        fill_in :user_zip, with: 'Zip'
         click_button 'Create User'
 
         expect(current_path).to eq(users_path)
@@ -89,7 +77,7 @@ RSpec.describe 'Registration and Session Management' do
       expect(page).to have_content("Logged in as #{@user.name}")
       expect(page).to have_content(@email)
     end
-        
+
     it 'should redirect with a message if already logged in' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
       visit login_path
