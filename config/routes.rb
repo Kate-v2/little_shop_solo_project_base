@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   namespace :profile do
     get 'edit'
     get 'orders'
-    resources :user_addresses, only: [:index, :show, :new, :create, :edit, :update]
+    resources :user_addresses, only: [:index, :new, :create, :edit, :update]
   end
 
   get '/dashboard', to: 'dashboard#show'
