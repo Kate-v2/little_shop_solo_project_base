@@ -13,10 +13,10 @@ RSpec.describe 'User Show Page, aka Profile Page' do
       within '.profile-data' do
         expect(page).to have_content(@user.email)
         expect(page).to have_content(@user.name)
-        expect(page).to have_content(@user.address)
-        expect(page).to have_content(@user.city)
-        expect(page).to have_content(@user.state)
-        expect(page).to have_content(@user.zip)
+        expect(page).to have_content(@address.address)
+        expect(page).to have_content(@address.city)
+        expect(page).to have_content(@address.state)
+        expect(page).to have_content(@address.zip)
 
         click_link "Edit Profile Data"
         expect(current_path).to eq(profile_edit_path)
@@ -44,10 +44,10 @@ RSpec.describe 'User Show Page, aka Profile Page' do
       within '.profile-data' do
         expect(page).to have_content(@user.email)
         expect(page).to have_content(@user.name)
-        expect(page).to have_content(@user.address)
-        expect(page).to have_content(@user.city)
-        expect(page).to have_content(@user.state)
-        expect(page).to have_content(@user.zip)
+        expect(page).to have_content(@address.address)
+        expect(page).to have_content(@address.city)
+        expect(page).to have_content(@address.state)
+        expect(page).to have_content(@address.zip)
 
         click_link "Edit Profile Data"
         expect(current_path).to eq(edit_user_path(@user))
