@@ -1,0 +1,15 @@
+
+<div class='addresses'>
+  <% if @user.user_addresses %>
+    <% @user.user_addresses.each do |address| %>
+      <%= render 'address', locals: {address: address} %>
+    <% end %>
+
+  <% else %>
+    <h3>"No current addresses."
+    <% title = "Create an address" %>
+    <!-- < %= (link_to title,  ) %> -->
+    <!-- < %= (link_to title,  ) %> -->
+    <h3>
+  <% end %>
+</div>
