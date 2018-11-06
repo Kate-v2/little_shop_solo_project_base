@@ -12,7 +12,7 @@ describe 'user sees all addresses' do
     @address3 = create(:user_address, user: @user, default: false)
     @address4 = create(:user_address, user: @user, default: false, active: false )
 
-    @url = profile_user_addresses_path(@user)
+    @url = profile_user_addresses_path(user_id: @user)
   end
 
   describe 'Viewers' do
@@ -114,6 +114,43 @@ describe 'user sees all addresses' do
         expect(card).to have_content("Inactive")
       end
     end
+
+    describe 'linking changes' do
+
+      it 'can enable' do
+        card = @cards.last
+        card.click_button("Enable")
+        expect(page).to have_current_path(@url)
+        card = page.all('.address').last
+        expect(card).to have_content("Active")
+      end
+      it 'can disable' do
+        card = @cards[1]
+        card.click_button("Disable")
+        expect(page).to have_current_path(@url)
+        card = page.all('.address')[1]
+        expect(card).to have_content("Inactive")
+      end
+      it 'can make default' do
+        desired = page.find("#address-#{@address2.id}")
+        desired.click_button("Make Default")
+        expect(page).to have_current_path(@url)
+
+        first = page.all('.address').first
+        expect(first).to     have_content(@address2.address)
+        expect(first).to_not have_button("Make Default")
+        expect(first).to     have_content("Default")
+
+        previous = page.find("#address-#{@address1.id}")
+        expect(previous).to have_content(@address1.address)
+        expect(previous).to have_button("Make Default")
+      end
+
+
+
+
+    end
+
   end
 
 

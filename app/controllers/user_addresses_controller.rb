@@ -2,7 +2,7 @@
 class UserAddressesController < ApplicationController
 
   def index
-    id = params[:format].to_i
+    id = params[:user_id].to_i
     if current_user && current_user.id == id
       @user = User.find(id) # if current_user.id == id
       addresses  = @user.user_addresses
@@ -29,19 +29,20 @@ class UserAddressesController < ApplicationController
     if current_user
       id = params[:id].to_i
       @address = UserAddress.find(id)
-      if params[:active]
-        @address.active = params[:active]
+      if !params[:active].nil?
+        @address.active = true  if params[:active] == "true"
+        @address.active = false if params[:active] == "false"
         can_save(@address, :enabled, :disabled)
       end
-      if params[:default] == true
-        previous = UserAddress.find_by(default: true )
-        previous.default = false
-        can_save(previous, :previous, :other)
+      if params[:default] == "true"
+        @previous = UserAddress.find_by(default: true )
+        @previous.default = false
+        can_save(@previous, :previous, :other)
         @address.default = true
         can_save(@address, :default, :other)
       end
 
-      redirect_to profile_user_addresses_path
+      redirect_to profile_user_addresses_path(user_id: current_user)
     else
       render file: 'errors/not_found', status: 404
     end
@@ -56,22 +57,25 @@ class UserAddressesController < ApplicationController
 
   def can_save(address, success, fail)
     if address.save
-      flash[:notice] = flashes[success]
+      flash[:notice] = "#{address.address.titleize}" + flashes[success]
       true
     else
-      flash[:notice] = flashes[fail]
+      flash[:notice] = "#{address.address.titleize}" + flashes[fail]
       false
     end
   end
 
   def flashes
     {
-      previous: "#{@previous.address.titleize} is no longer your default address.",
-      default:  "#{@address.address.titleize } is now your default address.",
-      enabled:  "#{@address.address.titleize } has been enabled.",
-      disabled: "#{@address.address.titleize } has been disabled.",
-      success:  "#{@address.address.titleize } has been created.",
+      previous: " is no longer your default address.",
+      default:  " is now your default address.",
+
+      enabled:  " has been enabled.",
+      disabled: " has been disabled.",
+
+      success:  " has been created.",
       failure:  "New address failed to create.",
+
       other:    "Something went wrong."
     }
   end
