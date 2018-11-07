@@ -167,11 +167,24 @@ RSpec.describe 'Merchant Stats' do
       @item1 = create(:item, user: @merchant, image: nil)
       @item2 = create(:item, user: @merchant, image: nil)
       @item3 = create(:item, user: @merchant)
+
+      user = create(:user)
+      address = create(:user_address, user: user)
+
+      @order1 = create(:order, user_address: address, user: user)
+      @order2 = create(:order, user_address: address, user: user)
+      @order3 = create(:order, user_address: address, user: user)
+
+      @oitem1 = create(:order_item, item: @item1, order: @order1)
+      @oitem2 = create(:order_item, item: @item2, order: @order1, fulfilled: true)
+      @oitem3 = create(:order_item, item: @item3, order: @order2)
+      @oitem4 = create(:order_item, item: @item3, order: @order3)
+
+      login(@merchant)
+      visit dashboard_path
     end
 
     it 'displays all items that need images' do
-      login(@merchant)
-      visit dashboard_path
       list = page.find('.missing-images')
       expect(list).to     have_content(@item1.name)
       expect(list).to     have_content(@item2.name)
@@ -179,20 +192,30 @@ RSpec.describe 'Merchant Stats' do
     end
 
     it 'items that need images are links' do
-      login(@merchant)
-      visit dashboard_path
       item = page.find('.missing-images')
       item.click_on("#{@item1.name}")
       path = edit_merchant_item_path(merchant_id: @merchant.id, id: @item1.id)
       expect(page).to have_current_path(path)
+    end
+
+    it 'displays orders that need to be fulfilled' do
+      section = page.find('.pending_orders')
+      # oitem = section.find("#pending-#{@oitem1.}")
+      expect(section).to      have_content(@oitem1.item.name)
+      expect(section).to_not have_content(@oitem2.item.name)
+      expect(section).to     have_content(@oitem3.item.name)
+    end
+
+    it 'links to fulfilling orders' do
+
 
     end
 
+
+
+
+
   end
-
-
-
-
 
 end
 

@@ -1,0 +1,24 @@
+
+<div class='pending-orders'>
+
+  <h2>Pending Orders</h2>
+  <h3><%= number_to_currency(@impact) %> pending revenue
+    across <%= @order_count %> orders with <%= @distinct_items %> distinct items
+  </h3>
+
+  <% @pending.each do |oitem| %>
+
+    <span class='pending-item', id="pending-<%=oitem.id%>">
+      <% possible = (oitem.quantity <= oitem.item.inventory) %>
+      <h3><%= oitem.item.name %>
+      <% if possible %>
+        <%= link_to "Fulfill", order_item_fulfill_path(order_id: oitem.order_id, order_item_id: oitem.id)%>
+      <% else %>
+          You do not have enough inventory to fulfill.
+      <% end %>
+      </h3>
+    </span>
+  <% end %>
+
+
+</div>

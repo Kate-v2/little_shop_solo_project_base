@@ -18,6 +18,27 @@ class User < ApplicationRecord
     items.where(image: nil)
   end
 
+  def pending_order_items
+    # OrderItem
+    # .joins(:items)
+    # .where('items.user_id = ?', self.id)
+    # .where('order_items.fulfilled = false')
+    items.joins(:order_items).where('order_items.fulfilled = false')
+  end
+
+  def total_impact
+    pending_order_items.sum('order_items.price * order_items.quantity ')
+    # pending_order_items.sum('price * quantity ')
+  end
+
+  def distinct_items
+    pending_order_items.pluck(:item_id).uniq
+  end
+
+  def count_pending_orders
+    pending_order_items.pluck(:order_id).uniq
+  end
+
 
   # ------------------------
 

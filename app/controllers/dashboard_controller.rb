@@ -6,7 +6,10 @@ class DashboardController < ApplicationController
       @merchant = current_user
 
       @missing_images = @merchant.missing_images
-
+      @pending        = @merchant.pending_order_items
+      @impact         = @merchant.total_impact
+      @distinct_items = @merchant.distinct_items
+      @order_count    = @merchant.count_pending_orders
 
       # ---- STATS ------
     #   @total_items_sold = @merchant.total_items_sold
