@@ -1,0 +1,11 @@
+
+<div class='missing-images'>
+  <h3>These items need pictures:</h3>
+
+  <% @missing_images.each do |item| %>
+    <%= link_to "#{item.name}", edit_merchant_item_path(merchant_id: @merchant.id, id: item) %>
+  <% end %>
+
+
+
+</div>

@@ -1,0 +1,66 @@
+<div id="stats">
+  <div id='stats-top-states'>
+    <p>Top 3 States:</p>
+      <% if @top_3_shipping_states %>
+      <ul>
+      <% @top_3_shipping_states.each do |state| %>
+      <li><%= state %></li>
+      <% end %>
+      </ul>
+      <% else %>
+      <p>(none yet)</p>
+      <% end %>
+  </div>
+
+  <div id='stats-top-cities'>
+    <p>Top 3 Cities:</p>
+      <% if @top_3_shipping_cities %>
+      <ul>
+      <% @top_3_shipping_cities.each do |city| %>
+      <li><%= city %></li>
+      <% end %>
+      </ul>
+      <% else %>
+      (none yet)
+      <% end %>
+  </div>
+
+  <div id='stats-top-buyers'>
+    <p>Top Buyers:</p>
+      <% if @top_buyers %>
+      <ul>
+      <% @top_buyers.each do |buyer| %>
+      <li><%= buyer.name %>, <%= number_to_currency(buyer.total_spent) %></li>
+      <% end %>
+      </ul>
+      <% else %>
+      (none yet)
+      <% end %>
+  </div>
+
+  <div id='stats-top-merchants'>
+    <p>Top Merchants:</p>
+      <% if @top_merchants %>
+      <ul>
+      <% @top_merchants.each do |merchant| %>
+      <li><%= merchant.name %>, <%= number_to_currency(merchant.total_earned) %></li>
+      <% end %>
+      </ul>
+      <% else %>
+      (none yet)
+      <% end %>
+  </div>
+
+  <div id='stats-biggest-orders'>
+    <p>Biggest Orders by Quantity:</p>
+    <% if @biggest_orders %>
+    <ul>
+    <% @biggest_orders.each do |order| %>
+    <li>Order #<%= order.id %> by <%= order.user_name %>, <%= number_with_delimiter(order.item_count) %> items</li>
+    <% end %>
+    </ul>
+    <% else %>
+    (none yet)
+    <% end %>
+  </div>
+</div>

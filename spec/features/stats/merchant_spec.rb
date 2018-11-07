@@ -156,5 +156,41 @@ RSpec.describe 'Merchant Stats' do
         end
       end
     end
+
   end
+
+
+  describe 'Merchant To Do list' do
+
+    before(:each) do
+      @merchant = create(:user, role: 1)
+      @item1 = create(:item, user: @merchant, image: nil)
+      @item2 = create(:item, user: @merchant, image: nil)
+      @item3 = create(:item, user: @merchant)
+    end
+
+    it 'displays all items that need images' do
+      login(@merchant)
+      visit dashboard_path
+      list = page.find('.missing-images')
+      expect(list).to     have_content(@item1.name)
+      expect(list).to     have_content(@item2.name)
+      expect(list).to_not have_content(@item3.name)
+    end
+
+  end
+
+
+
+
+
+end
+
+
+def login(user)
+  visit logout_path
+  visit login_path
+  fill_in "Email", with: user.email
+  fill_in "Password", with: user.password
+  click_button "Log in"
 end

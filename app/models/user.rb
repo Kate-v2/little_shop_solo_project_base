@@ -10,6 +10,28 @@ class User < ApplicationRecord
 
   enum role: %w(user merchant admin)
 
+
+
+  # ---- TO DO -------------
+
+  def missing_images
+    items.where(image: nil)
+  end
+
+
+  # ------------------------
+
+
+
+
+
+
+
+
+
+
+
+
   def merchant_orders(status=nil)
     if status.nil?
       Order.distinct.joins(:items).where('items.user_id=?', self.id)
