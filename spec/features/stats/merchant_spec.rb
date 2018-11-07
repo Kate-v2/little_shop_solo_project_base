@@ -178,6 +178,16 @@ RSpec.describe 'Merchant Stats' do
       expect(list).to_not have_content(@item3.name)
     end
 
+    it 'items that need images are links' do
+      login(@merchant)
+      visit dashboard_path
+      item = page.find('.missing-images')
+      item.click_on("#{@item1.name}")
+      path = edit_merchant_item_path(merchant_id: @merchant.id, id: @item1.id)
+      expect(page).to have_current_path(path)
+
+    end
+
   end
 
 

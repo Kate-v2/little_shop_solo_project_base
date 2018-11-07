@@ -5,15 +5,7 @@ class DashboardController < ApplicationController
     if current_user.merchant?
       @merchant = current_user
 
-      # @missing_images = Item.missing_images(@merchant)
-      # @missing_images = @merchant.items.where(image: nil)
       @missing_images = @merchant.missing_images
-      # binding.pry
-
-
-
-
-
 
 
       # ---- STATS ------
